@@ -2,6 +2,8 @@ package servlets;
 
 import accounts.AccountService;
 import accounts.UserProfile;
+import dbService.DBException;
+import dbService.DBService;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,11 +17,19 @@ public class SignUpServlet extends HttpServlet {
     }
     public void doPost (HttpServletRequest request, HttpServletResponse response){
         String login = request.getParameter("login");
-        String pass = request.getParameter("password");
+        String password = request.getParameter("password");
 
-        UserProfile userProfile = new UserProfile(login,pass);
-
+/*      UserProfile userProfile = new UserProfile(login,pass);
         accountService.addNewUser(userProfile);
+*/
+        DBService dbService = new DBService();
+        try {
+           long userId = dbService.addUser(login, password);
+            System.out.println(userId);
+        }
+        catch (DBException e){
+            e.printStackTrace();
+        }
 
 //        if (login == null || pass == null) {
 //            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
